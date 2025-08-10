@@ -1,11 +1,9 @@
-"use client";
-
 import React, { Suspense } from "react";
-import ResetPasswordForm from "./resetPasswordForm"; // Move your entire form logic into this component.
+import ResetPasswordForm from "./resetPasswordForm";
 
-export default function Page() {
+export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading...</div>}>
       <ResetPasswordForm />
     </Suspense>
   );

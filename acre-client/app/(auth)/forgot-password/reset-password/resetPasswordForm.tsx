@@ -27,13 +27,16 @@ import { resetPasswordFunc } from "./action";
 import { Loader2 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
+import { passwordMatchSchema } from "@/validation/passwordMatchSchema";
 
-const formSchema = z.object({
-  password: z.string().min(6),
-  passwordConfirm: z.string().min(6),
-});
+// const formSchema = z.object({
+//   password: z.string().min(6),
+//   passwordConfirm: z.string().min(6),
+// });
 
-export default function ResetPassword() {
+const formSchema = passwordMatchSchema;
+
+export default function ResetPasswordForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionReady, setSessionReady] = useState(false);
@@ -88,12 +91,18 @@ export default function ResetPassword() {
 
       if (response.error) {
         setServerError(response.message);
+        toast.error("Update Failed", { description: response.message });
       } else {
+        toast.success("Success!", { description: "Your password has been updated." });
         router.push("/dashboard");
       }
     } catch (error) {
-      setServerError(error.message);
-      toast.error(error.message ?? "An unexpected error occurred. Please try again.");
+      let errorMessage = "An unexpected error occurred.";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      setServerError(errorMessage);
+      toast.error("Error", { description: errorMessage });
     } finally {
       setIsLoading(false);
     }
