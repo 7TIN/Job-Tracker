@@ -1,8 +1,7 @@
-import GridExample from "@/components/jobTable";
 
 export default function Home() {
   return (
-    <div className="">
+    <div >
       Welcome
     </div>
   );
