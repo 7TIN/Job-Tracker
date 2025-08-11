@@ -52,23 +52,41 @@ export default function ResetPasswordForm() {
     },
   });
 
+  // useEffect(() => {
+  //   const checkSession = async () => {
+  //     setLoading(true);
+  //     const type = searchParams.get("type");
+  //     const accessToken = searchParams.get("access_token");
+  //     const supabase = createClient();
+
+  //     if (type === "recovery" && accessToken) {
+
+  //       await supabase.auth.setSession({
+  //         access_token: accessToken,
+  //         refresh_token: "",
+  //       });
+  //     }
+
+  //     const { data, error } = await supabase.auth.getUser();
+  //     if (data.user && !error) {
+  //       setSessionReady(true);
+  //     } else {
+  //       setSessionReady(false);
+  //     }
+  //     setLoading(false);
+  //   };
+
+  //   checkSession();
+  // }, [searchParams]);
+
   useEffect(() => {
     const checkSession = async () => {
       setLoading(true);
-      const type = searchParams.get("type");
-      const accessToken = searchParams.get("access_token");
       const supabase = createClient();
+      
+      const { data } = await supabase.auth.getUser();
 
-      if (type === "recovery" && accessToken) {
-
-        await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: "",
-        });
-      }
-
-      const { data, error } = await supabase.auth.getUser();
-      if (data.user && !error) {
+      if (data.user) {
         setSessionReady(true);
       } else {
         setSessionReady(false);
@@ -77,7 +95,7 @@ export default function ResetPasswordForm() {
     };
 
     checkSession();
-  }, [searchParams]);
+  }, []);
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     setServerError(null);

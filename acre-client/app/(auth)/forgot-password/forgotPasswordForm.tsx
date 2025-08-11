@@ -47,34 +47,39 @@ export default function ForgotPasswordForm() {
   });
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    setServerError(null);
-    setIsLoading(true);
+  setServerError(null);
+  setIsLoading(true);
 
-    try {
-      const response = await forgotPassword({ email: data.email });
+  try {
+    const response = await forgotPassword({ email: data.email });
 
-      if (response.message) {
-        toast.success("Request Sent", {
-          description: response.message,
-        });
-        router.push(
-          `/forgot-password/confirmation?email=${encodeURIComponent(
-            data.email
-          )}`
-        );
-      }
-    } catch (error) {
-      let errorMessage = "An unexpected error occurred. Please try again.";
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      toast.error("Error", {
-        description: errorMessage,
+    if (response.success) {
+      toast.success("Request Sent", {
+        description: response.message, 
       });
-    } finally {
-      setIsLoading(false);
+      router.push(
+        `/forgot-password/confirmation?email=${encodeURIComponent(
+          data.email
+        )}`
+      );
+    } else if (response.error) {
+        toast.error("Request Failed", {
+            description: response.message,
+        })
+        setServerError(response.message)
     }
-  };
+  } catch (error) {
+    let errorMessage = "An unexpected error occurred. Please try again.";
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    toast.error("Error", {
+      description: errorMessage,
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <main className="flex justify-center items-center min-h-screen">

@@ -62,18 +62,23 @@ export default function RegisterForm() {
     });
 
     if (response.error) {
+      toast.error("Registration Failed", {
+        description: response.message,
+      });
       setServerError(response.message);
     } else {
+      toast.success("Registration Successful!", {
+        description: "Please check your email to confirm your account.",
+      });
       router.push(`/register/confirmation?email=${encodeURIComponent(data.email)}`);
     }
   } catch (error) {
-    
     let errorMessage = "An unexpected error occurred. Please try again.";
     if (error instanceof Error) {
       errorMessage = error.message;
     }
     setServerError(errorMessage);
-    toast.error(errorMessage);
+    toast.error("Error", { description: errorMessage });
   } finally {
     setIsLoading(false);
   }

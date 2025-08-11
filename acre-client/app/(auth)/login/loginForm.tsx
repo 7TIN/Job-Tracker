@@ -49,34 +49,34 @@ export default function LoginForm() {
   });
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    setServerError(null);
-    setIsLoading(true);
+  setServerError(null);
+  setIsLoading(true);
 
-    try {
-      const response = await loginUser({
-        email: data.email,
-        password: data.password,
+  try {
+    const response = await loginUser({
+      email: data.email,
+      password: data.password,
+    });
+
+    if (response.error) {
+      toast.error("Login Failed", {
+        description: response.message,
       });
-
-      if (response.error) {
-        setServerError(response.message);
-      } else {
-        // Redirect to the dashboard page
-        router.push("/dashboard");
-      }
-    } catch (error) {
-    // Safely get the error message
+      setServerError(response.message);
+    } else {
+      router.push("/dashboard");
+    }
+  } catch (error) {
     let errorMessage = "An unexpected error occurred. Please try again.";
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    
     setServerError(errorMessage);
-    toast.error(errorMessage);
-    } finally {
-      setIsLoading(false); // Set loading to false when submission ends
-    }
-  };
+    toast.error("Error", { description: errorMessage });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   // pass the email value to forget password page
   const email = form.getValues("email");
