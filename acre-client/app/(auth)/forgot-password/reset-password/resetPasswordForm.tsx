@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -42,7 +42,7 @@ export default function ResetPasswordForm() {
   const [sessionReady, setSessionReady] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
