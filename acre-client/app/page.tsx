@@ -7,8 +7,6 @@ export default function Home() {
       <div className ="">
         Welcome
       </div>
-
-
       <LogoutButton />
     </div>
 
