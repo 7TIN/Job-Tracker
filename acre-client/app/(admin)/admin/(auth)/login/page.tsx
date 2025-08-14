@@ -1,9 +1,10 @@
-export default function LoginPage() {
+import AdminLoginForm from "./adminLoginForm";
+import { Suspense } from "react";
+
+export default async function AdminLoginPage() {
   return (
-    <div className="flex flex-col items-center text-5xl justify-center min-h-screen space-y-3.5">
-      <div className="">
-        Login
-      </div>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <AdminLoginForm />
+    </Suspense>
   );
 }

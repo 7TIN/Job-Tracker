@@ -48,5 +48,4 @@ model Admin {
   email        String    @unique
   passwordHash String
   role         AdminRole @default(MODERATOR)
-  createdAt    DateTime  @default(now()) @map("created_at")
 }
