@@ -3,8 +3,8 @@ import AdminLogoutButton from "../(auth)/logout/AdminLogoutButton";
 
 export default function page() {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+    <div className="flex items-center flex-col justify-center h-screen space-y-10">
+      <h1 className="text-5xl ">Admin Dashboard</h1>
       <AdminLogoutButton />
     </div>
   );

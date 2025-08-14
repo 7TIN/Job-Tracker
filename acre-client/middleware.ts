@@ -52,7 +52,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/admin")) {
-    const adminToken = request.cookies.get("admin_token")?.value; // ✅ fixed key
+    const adminToken = request.cookies.get("admin_session")?.value;
     const isAdmin = await verifyAdminToken(adminToken);
 
     if (!isAdmin && pathname !== "/admin/login") {

@@ -6,8 +6,7 @@ import { redirect } from "next/navigation";
 export async function adminLogout() {
   const cookieStore = await cookies();
 
-  // Expire the admin_token immediately
-  cookieStore.set("admin_token", "", {
+  cookieStore.set("admin_session", "", {
     httpOnly: true,
     path: "/",
     maxAge: 0,
