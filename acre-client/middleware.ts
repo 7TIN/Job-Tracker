@@ -51,6 +51,10 @@ async function verifyAdminToken(token?: string) {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname.startsWith("/auth/callback")) {
+    return NextResponse.next();
+  }
+
   if (pathname.startsWith("/admin")) {
     const adminToken = request.cookies.get("admin_session")?.value;
     const isAdmin = await verifyAdminToken(adminToken);
@@ -81,7 +85,6 @@ export async function middleware(request: NextRequest) {
 
   return supabaseResponse;
 }
-
 
 export const config = {
   matcher: [
