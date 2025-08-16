@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -6,6 +5,19 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public"]
+}
+
+model User {
+  id          String   @id @db.Uuid
+  email       String?
+  displayName String?  @map("display_name")
+  createdAt   DateTime @map("created_at")
+
+  jobs Job[]
+
+  @@map("users")
+  @@schema("public")
 }
 
 model Job {
@@ -13,21 +25,26 @@ model Job {
   userId           String    @db.Uuid @map("userid")
   company          String?
   position         String?   
-  applicationLink  String?   
+  applicationLink  String?   @map("applicationlink")
   status           String?   @default("Applied")
   appliedDate      DateTime? @default(now()) @db.Date @map("applieddate")
   location         String?   @default("undisclosed")
   platform         String?
   salary           String?   @default("0")
   notes            String?   @default(" ")
-  interviewRounds  Json?     @db.JsonB @map("interviewrounds")
 
+  user User @relation(fields: [userId], references: [id])
+  
   @@map("jobs")
+  @@schema("public")
 }
+
 
 enum AdminRole {
   SUPER_ADMIN
   MODERATOR
+
+  @@schema("public")
 }
 
 model Admin {
@@ -35,4 +52,6 @@ model Admin {
   email        String    @unique
   passwordHash String
   role         AdminRole @default(MODERATOR)
+
+  @@schema("public")
 }
