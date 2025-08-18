@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, themeQuartz } from 'ag-grid-community';
 import { Job } from '@/types/job';
 import { AllCommunityModule,ModuleRegistry } from 'ag-grid-community';
-import { Button } from './ui/button';
+// import { Button } from './ui/button';
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 
@@ -42,6 +42,10 @@ export default function JobGrid({ data }: Props) {
   const gridRef = useRef<AgGridReact<Job>>(null);
 
   const [rowData, setRowData] = useState<Job[]>(data);
+  
+  useEffect(() => {
+    setRowData(data);
+  }, [data]);
 
   const [columnDefs] = useState<ColDef<Job>[]>([
     {
@@ -52,7 +56,7 @@ export default function JobGrid({ data }: Props) {
     pinned: 'left',
   },
     { headerName: 'Company', field: 'company', editable: true },
-    { headerName: 'Position', field: 'title', editable: true },
+    { headerName: 'Position', field: 'position', editable: true },
     { headerName: 'Applied Date', field: 'appliedDate', editable: true },
     { headerName: 'Platform', field: 'platform', editable: true },
     {
@@ -64,7 +68,10 @@ export default function JobGrid({ data }: Props) {
         values: ['Applied', 'Interviewing', 'Rejected', 'Offer'],
       },
     },
-    { headerName: 'Notes', field: 'notes', editable: true },
+    { headerName: 'Location', field: 'location', editable: true},
+    { headerName: 'Salary', field: 'salary', editable: true},
+    { headerName: 'Notes', field: 'notes', editable: true},
+    { headerName: 'Link', field: 'applicationLink', editable: true },
   ]);
 
   const defaultColDef = useMemo<ColDef<Job>>(
@@ -73,29 +80,13 @@ export default function JobGrid({ data }: Props) {
       filter: true,
       resizable: true,
       flex: 1,
+      minWidth: 100,
     }),
     []
   );
 
-  const handleAddRow = () => {
-    const newRow: Job = {
-      id: Date.now().toString(),
-      company: "",
-      title: "",
-      appliedDate: "",
-      platform: "",
-      status: "Applied",
-      notes: "",
-    };
-
-    setRowData((prev) => [...prev, newRow]);
-  };
-
   return (
    <div className="flex flex-col gap-4">
-      <Button onClick={handleAddRow} className="w-fit">
-        + Add Job
-      </Button> 
     <div className="shadow-xl shadow-neutral-200 rounded-b-xl" style={{height:500, width:'100%'}}>
       <AgGridReact<Job>
         ref={gridRef}

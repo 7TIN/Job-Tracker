@@ -13,10 +13,7 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password cannot be empty"),
 });
 
-export async function adminLogin({
-  email,
-  password,
-}: z.infer<typeof loginSchema>) {
+export async function adminLogin({ email, password }: z.infer<typeof loginSchema>) {
   const validation = loginSchema.safeParse({ email, password });
   if (!validation.success) {
     return {
