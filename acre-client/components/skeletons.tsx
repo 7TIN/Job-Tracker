@@ -15,94 +15,81 @@ const shimmerKeyframes = `
 
 function AgGridRowSkeleton() {
   return (
-    <div className="grid grid-cols-[60px_1fr_1fr_120px_100px_100px_100px_100px_2fr_100px] gap-0 items-center border-b border-gray-200/60 bg-white hover:bg-gray-50/50 transition-colors">
-      {/* Row number column */}
+    <div className="grid grid-cols-10 gap-x-4 items-center border-b border-gray-200/60 bg-white hover:bg-gray-50/50 transition-colors">
+      {/* Row number */}
       <div className="px-3 py-3 flex justify-center">
-        <div className={`h-4 w-6 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+        <div className={`h-4 w-6 rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
 
-      {/* Company column */}
+      {/* Company */}
       <div className="px-3 py-3">
-        <div className={`h-4 w-24 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+        <div className={`h-4 w-full max-w-[120px] rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
 
-      {/* Position column */}
+      {/* Position */}
       <div className="px-3 py-3">
-        <div className={`h-4 w-32 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+        <div className={`h-4 w-full max-w-[160px] rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
 
-      {/* Applied Date column */}
+      {/* Applied Date */}
       <div className="px-3 py-3">
-        <div className={`h-4 w-20 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+        <div className={`h-4 w-full max-w-[100px] rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
 
-      {/* Platform column */}
+      {/* Platform */}
       <div className="px-3 py-3">
-        <div className={`h-4 w-16 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+        <div className={`h-4 w-full max-w-[80px] rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
 
-      {/* Status column */}
+      {/* Status */}
       <div className="px-3 py-3">
-        <div className={`h-6 w-20 rounded-full bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+        <div className={`h-6 w-full max-w-[100px] rounded-full bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
 
-      {/* Location column */}
+      {/* Location */}
       <div className="px-3 py-3">
-        <div className={`h-4 w-24 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+        <div className={`h-4 w-full max-w-[140px] rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
 
-      {/* Salary column */}
+      {/* Salary */}
       <div className="px-3 py-3">
-        <div className={`h-4 w-16 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+        <div className={`h-4 w-full max-w-[80px] rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
 
-      {/* Notes column - wider */}
+      {/* Notes */}
       <div className="px-3 py-3">
-        <div className={`h-4 w-48 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+        <div className={`h-4 w-full max-w-[200px] rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
 
-      {/* Link column */}
+      {/* Link */}
       <div className="px-3 py-3">
-        <div className={`h-4 w-12 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+        <div className={`h-4 w-full max-w-[60px] rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
     </div>
   )
 }
 
 function AgGridHeaderSkeleton() {
+  const headers = [
+    "#",
+    "Company",
+    "Position",
+    "Applied Date",
+    "Platform",
+    "Status",
+    "Location",
+    "Salary",
+    "Notes",
+    "Link",
+  ]
+
   return (
-    <div className="grid grid-cols-[60px_1fr_1fr_120px_100px_100px_100px_100px_2fr_100px] gap-0 items-center bg-white border-b border-gray-200 sticky top-0 z-10">
-      {/* Header columns matching the data columns exactly */}
-      <div className="px-3 py-4 text-center">
-        <div className="text-xs font-medium text-gray-400">#</div>
-      </div>
-      <div className="px-3 py-4">
-        <div className="text-xs font-medium text-gray-400">Company</div>
-      </div>
-      <div className="px-3 py-4">
-        <div className="text-xs font-medium text-gray-400">Position</div>
-      </div>
-      <div className="px-3 py-4">
-        <div className="text-xs font-medium text-gray-400">Applied Date</div>
-      </div>
-      <div className="px-3 py-4">
-        <div className="text-xs font-medium text-gray-400">Platform</div>
-      </div>
-      <div className="px-3 py-4">
-        <div className="text-xs font-medium text-gray-400">Status</div>
-      </div>
-      <div className="px-3 py-4">
-        <div className="text-xs font-medium text-gray-400">Location</div>
-      </div>
-      <div className="px-3 py-4">
-        <div className="text-xs font-medium text-gray-400">Salary</div>
-      </div>
-      <div className="px-3 py-4">
-        <div className="text-xs font-medium text-gray-400">Notes</div>
-      </div>
-      <div className="px-3 py-4">
-        <div className="text-xs font-medium text-gray-400">Link</div>
-      </div>
+    <div className="grid grid-cols-10 gap-x-4 items-center bg-white border-b border-gray-200 sticky top-0 z-10">
+      {headers.map((title, i) => (
+        <div key={i} className="px-3 py-4 text-left">
+          <div className="text-xs font-medium text-gray-400">{title}</div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -113,139 +100,33 @@ export function JobGridSkeleton() {
       <style dangerouslySetInnerHTML={{ __html: shimmerKeyframes }} />
       <div className="flex flex-col">
         <div className="shadow-xl shadow-neutral-200 rounded-b-xl w-full h-[500px] bg-white border border-gray-200 overflow-hidden">
-          {/* ag-Grid wrapper styling */}
           <div className="h-full flex flex-col bg-white rounded-b-xl">
             {/* Header */}
             <AgGridHeaderSkeleton />
 
-            {/* Body with scrollable content */}
+            {/* Body */}
             <div className="flex-1 overflow-hidden bg-white">
               <div>
-                <AgGridRowSkeleton />
-                <AgGridRowSkeleton />
-                <AgGridRowSkeleton />
-                <AgGridRowSkeleton />
-                <AgGridRowSkeleton />
-                <AgGridRowSkeleton />
-                <AgGridRowSkeleton />
-                <AgGridRowSkeleton />
-                <AgGridRowSkeleton />
-                <AgGridRowSkeleton />
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <AgGridRowSkeleton key={i} />
+                ))}
               </div>
             </div>
 
-            {/* Footer/Pagination area */}
+            {/* Footer */}
             <div className="border-t border-gray-200 bg-white px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className={`h-4 w-16 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-                <div className={`h-4 w-8 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-                <div className={`h-4 w-12 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+                <div className={`h-4 w-16 rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
+                <div className={`h-4 w-8 rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
+                <div className={`h-4 w-12 rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
               </div>
               <div className="flex items-center gap-2">
-                <div className={`h-8 w-8 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-                <div className={`h-8 w-8 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-                <div className={`h-8 w-8 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-                <div className={`h-8 w-8 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
+                <div className={`h-8 w-8 rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
+                <div className={`h-8 w-8 rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
+                <div className={`h-8 w-8 rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
+                <div className={`h-8 w-8 rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
-
-// Keep the original table skeleton for backward compatibility
-function JobTableRowSkeleton() {
-  return (
-    <tr className="w-full border-b border-gray-100 last-of-type:border-none">
-      <td className="whitespace-nowrap p-4">
-        <div className={`h-5 w-5 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-      </td>
-      <td className="whitespace-nowrap p-4">
-        <div className={`h-5 w-18 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-      </td>
-      <td className="whitespace-nowrap p-4">
-        <div className={`h-5 w-32 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-      </td>
-      <td className="whitespace-nowrap p-4">
-        <div className={`h-5 w-20 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-      </td>
-      <td className="whitespace-nowrap p-4">
-        <div className={`h-5 w-20 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-      </td>
-      <td className="whitespace-nowrap p-4">
-        <div className={`h-5 w-16 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-      </td>
-      <td className="whitespace-nowrap p-4">
-        <div className={`h-5 w-28 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-      </td>
-      <td className="whitespace-nowrap p-4">
-        <div className={`h-5 w-16 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-      </td>
-      <td className="whitespace-nowrap p-4">
-        <div className={`h-5 w-48 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-      </td>
-      <td className="whitespace-nowrap p-4">
-        <div className={`h-5 w-12 rounded bg-gray-200 ${shimmer} relative overflow-hidden`}></div>
-      </td>
-    </tr>
-  )
-}
-
-export function JobTableSkeleton() {
-  return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: shimmerKeyframes }} />
-      <div className="shadow-xl shadow-neutral-200 rounded-b-xl w-full h-[500px]">
-        <div className="inline-block min-w-full align-middle h-full">
-          <div className="rounded-b-xl bg-gray-50 p-2 h-full overflow-hidden">
-            <table className="min-w-full text-gray-900">
-              <thead className="rounded-lg text-left text-sm font-normal bg-white">
-                <tr>
-                  <th scope="col" className="px-4 py-5 font-medium text-gray-400 w-[60px]">
-                    #
-                  </th>
-                  <th scope="col" className="px-4 py-5 font-medium text-gray-400">
-                    Company
-                  </th>
-                  <th scope="col" className="px-4 py-5 font-medium text-gray-400">
-                    Position
-                  </th>
-                  <th scope="col" className="px-4 py-5 font-medium text-gray-400">
-                    Applied Date
-                  </th>
-                  <th scope="col" className="px-4 py-5 font-medium text-gray-400">
-                    Platform
-                  </th>
-                  <th scope="col" className="px-4 py-5 font-medium text-gray-400">
-                    Status
-                  </th>
-                  <th scope="col" className="px-4 py-5 font-medium text-gray-400">
-                    Location
-                  </th>
-                  <th scope="col" className="px-4 py-5 font-medium text-gray-400">
-                    Salary
-                  </th>
-                  <th scope="col" className="px-4 py-5 font-medium text-gray-400">
-                    Notes
-                  </th>
-                  <th scope="col" className="px-4 py-5 font-medium text-gray-400">
-                    Link
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white">
-                <JobTableRowSkeleton />
-                <JobTableRowSkeleton />
-                <JobTableRowSkeleton />
-                <JobTableRowSkeleton />
-                <JobTableRowSkeleton />
-                <JobTableRowSkeleton />
-                <JobTableRowSkeleton />
-                <JobTableRowSkeleton />
-              </tbody>
-            </table>
           </div>
         </div>
       </div>

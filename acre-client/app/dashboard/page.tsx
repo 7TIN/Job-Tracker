@@ -69,10 +69,7 @@ export default function DashboardPage() {
       // fallback={<JobGridSkeleton />}
       fallback={<JobGridSkeleton />}
       >
-        {/* setTimeout(() => {
-          <JobTable />
-        }, 3000); */}
-        <JobTable />
+      <JobTable /> 
       </Suspense>
     </main>
   );
