@@ -2,13 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { ColDef, ICellRendererParams, themeQuartz } from 'ag-grid-community';
+import { ColDef,  themeQuartz } from 'ag-grid-community';
 import { Job } from '@/types/job';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { createJob } from '@/app/dashboard/actions';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
-import { Check, PlusCircle } from 'lucide-react';
+import { Check, Loader2, PlusCircle, X } from 'lucide-react';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -81,9 +81,9 @@ type Props = {
 
 export default function JobGrid({ data }: Props) {
   const gridRef = useRef<AgGridReact<Job>>(null);
-
   const [rowData, setRowData] = useState<Job[]>(data);
   const [tempRowId, setTempRowId] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   
   useEffect(() => {
     setRowData(data);
@@ -106,7 +106,6 @@ export default function JobGrid({ data }: Props) {
       field: 'status',
       editable: true,
       cellEditor: 'agSelectCellEditor',
-      
       cellEditorParams: {
         values: ['Applied', 'Interviewing', 'Assessment', 'Offer', 'Rejected', 'Wishlist'],
       },
@@ -149,54 +148,111 @@ export default function JobGrid({ data }: Props) {
 
     gridRef.current?.api.applyTransaction({
       add: [newRow],
-      addIndex: 0,
+      // addIndex: 0,
     });
   };
 
 
   const handleSaveRow = async () => {
     if (!tempRowId) return;
+    setIsSaving(true);
 
     const gridApi = gridRef.current?.api;
-    if (!gridApi) return;
+    if (!gridApi){
+      setIsSaving(false);
+      return;
+    }
 
     gridApi.stopEditing();
 
     const rowNode = gridApi.getRowNode(tempRowId);
+
     if (!rowNode || !rowNode.data) {
         toast.error("Could not find the new row to save.");
         return;
     }
 
-    const rowData = rowNode.data;
-    const result = await createJob(rowData);
+    // const rowData = rowNode.data;
+    // const result = await createJob(rowData);
 
-    if (result.error) {
-      toast.error('Failed to save job', { description: result.error });
-    } else if (result.success && result.data) {
-      toast.success('Job saved successfully!');
+    // if (result.error) {
+    //   toast.error('Failed to save job', { description: result.error });
+    // } else if (result.success && result.data) {
+    //   toast.success('Job saved successfully!');
 
-      gridApi.applyTransaction({
-        update: [result.data],
-      });
+    //   gridApi.applyTransaction({
+    //     update: [result.data],
+    //   });
 
-      gridApi.refreshClientSideRowModel('sort');
+    //   gridApi.refreshClientSideRowModel('sort');
       
-      setTempRowId(null);
+    //   setTempRowId(null);
+    // }
+    try {
+        const result = await createJob(rowNode.data);
+
+        if (result.error) {
+            toast.error('Failed to save job', { description: result.error });
+        } else if (result.success && result.data) {
+            toast.success('Job saved successfully!');
+            
+            gridApi.applyTransaction({
+                update: [result.data],
+            });
+
+            // Flash the cells of the newly saved row for visual feedback
+            const updatedNode = gridApi.getRowNode(result.data.id);
+            if (updatedNode) {
+                gridApi.flashCells({ rowNodes: [updatedNode] });
+            }
+
+            gridApi.refreshClientSideRowModel('sort');
+            setTempRowId(null); // Hide Save/Cancel buttons
+        }
+    } catch (error) {
+        toast.error("An unexpected error occurred while saving." + error);
+    } finally {
+        setIsSaving(false); // Ensure loading state is always turned off
     }
+    
+  };
+
+
+  const handleCancelAdd = () => {
+    if (!tempRowId) return;
+
+    const gridApi = gridRef.current?.api;
+    const rowNode = gridApi?.getRowNode(tempRowId);
+
+    if (rowNode && rowNode.data) {
+      gridApi?.applyTransaction({
+        remove: [rowNode.data],
+      });
+    }
+    setTempRowId(null);
   };
 
   return (
    <div className="flex flex-col gap-4">
     <div className="flex items-center gap-2">
-     <Button onClick={handleAddRow} className="w-fit">
+     <Button onClick={handleAddRow} disabled={!!tempRowId} className="w-fit">
         <PlusCircle className="mr-2 h-4 w-4" /> Add Job
       </Button>
 
       {tempRowId && (
-          <Button onClick={handleSaveRow} className="w-fit" variant="outline">
-            <Check className="mr-2 h-4 w-4 text-green-600" /> Save
-          </Button>
+          <>
+            <Button onClick={handleSaveRow} disabled={isSaving} className="w-fit" variant="outline">
+              {isSaving ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Check className="mr-2 h-4 w-4 text-green-600" />
+              )}
+              Save
+            </Button>
+            <Button onClick={handleCancelAdd} disabled={isSaving} className="w-fit" variant="outline">
+                <X className="mr-2 h-4 w-4 text-red-600" /> Cancel
+            </Button>
+          </>
         )}
     </div>
     <div className="shadow-xl shadow-neutral-200 rounded-b-xl w-full h-[500px]">
