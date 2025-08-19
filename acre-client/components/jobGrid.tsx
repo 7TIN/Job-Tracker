@@ -4,8 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, themeQuartz } from 'ag-grid-community';
 import { Job } from '@/types/job';
-import { AllCommunityModule,ModuleRegistry } from 'ag-grid-community';
-// import { Button } from './ui/button';
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 
@@ -49,28 +48,31 @@ export default function JobGrid({ data }: Props) {
 
   const [columnDefs] = useState<ColDef<Job>[]>([
     {
-    
+    headerName: '#',
     valueGetter: 'node.rowIndex + 1',
-    width: 50,
+    width: 60,
     suppressMovable: true,
     pinned: 'left',
   },
     { headerName: 'Company', field: 'company', editable: true },
     { headerName: 'Position', field: 'position', editable: true },
-    { headerName: 'Applied Date', field: 'appliedDate', editable: true },
+    { headerName: 'Applied Date', field: 'appliedDate', editable: true, 
+      // cellEditor: 'agDateCellEditor', valueFormatter: (params) => params.value ? new Date(params.value).toLocaleDateString('en-CA') : '',
+     },
     { headerName: 'Platform', field: 'platform', editable: true },
     {
       headerName: 'Status',
       field: 'status',
       editable: true,
       cellEditor: 'agSelectCellEditor',
+      
       cellEditorParams: {
-        values: ['Applied', 'Interviewing', 'Rejected', 'Offer'],
+        values: ['Applied', 'Interviewing', 'Assessment', 'Offer', 'Rejected', 'Wishlist'],
       },
     },
     { headerName: 'Location', field: 'location', editable: true},
     { headerName: 'Salary', field: 'salary', editable: true},
-    { headerName: 'Notes', field: 'notes', editable: true},
+    { headerName: 'Notes', field: 'notes', editable: true, flex: 2 },
     { headerName: 'Link', field: 'applicationLink', editable: true },
   ]);
 
@@ -86,8 +88,8 @@ export default function JobGrid({ data }: Props) {
   );
 
   return (
-   <div className="flex flex-col gap-4">
-    <div className="shadow-xl shadow-neutral-200 rounded-b-xl" style={{height:500, width:'100%'}}>
+   <div className="flex flex-col">
+    <div className="shadow-xl shadow-neutral-200 rounded-b-xl w-full h-[500px]">
       <AgGridReact<Job>
         ref={gridRef}
         rowData={rowData}
