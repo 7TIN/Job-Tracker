@@ -57,3 +57,49 @@ export async function createJob(data: unknown) {
     return { error: "Database error: Could not save the job." };
   }
 }
+
+const updateJobSchema = jobSchema.extend({
+  id: z.uuid(),
+});
+
+export async function updateJob(data: unknown) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Authentication required." };
+  }
+
+  const validation = updateJobSchema.safeParse(data);
+  if (!validation.success) {
+    console.error("Zod validation failed:", validation.error.issues);
+    return { error: "Invalid data for update." };
+  }
+
+  const { id, appliedDate, ...jobData } = validation.data;
+
+  try {
+    const updatedJob = await prisma.job.update({
+      where: {
+        id: id,
+        userId: user.id, 
+      },
+      data: {
+        ...jobData,
+        appliedDate: appliedDate ? new Date(appliedDate) : null,
+      },
+    });
+
+    revalidatePath("/dashboard");
+    return {
+      success: true,
+      data: {
+        ...updatedJob,
+        appliedDate: updatedJob.appliedDate ? updatedJob.appliedDate.toISOString().split('T')[0] : null,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to update job:", error);
+    return { error: "Database error: Could not update the job." };
+  }
+}
