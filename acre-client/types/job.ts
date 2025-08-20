@@ -17,7 +17,7 @@ export interface Job {
   position: string | null;
   applicationLink: string | null;
   status: string | null; 
-  appliedDate: string | null;
+  appliedDate: string | null | '';
   location: string | null;
   platform: string | null;
   salary: string | null;

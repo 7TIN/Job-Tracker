@@ -99,7 +99,7 @@ export default function JobGrid({ data }: Props) {
   },
     { headerName: 'Company', field: 'company', editable: true },
     { headerName: 'Position', field: 'position', editable: true },
-    { headerName: 'Applied Date', field: 'appliedDate', editable: true,},
+    { headerName: 'Applied Date', field: 'appliedDate', editable: true, cellEditor: 'agDateCellEditor', valueFormatter: (params) => params.value ? new Date(params.value).toLocaleDateString('en-CA') : '' },
     { headerName: 'Platform', field: 'platform', editable: true },
     {
       headerName: 'Status',

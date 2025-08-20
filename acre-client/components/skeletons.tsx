@@ -43,7 +43,7 @@ function AgGridRowSkeleton() {
 
       {/* Status */}
       <div className="px-3 py-3">
-        <div className={`h-6 w-full max-w-[100px] rounded-full bg-gray-200 ${shimmer} relative overflow-hidden`} />
+        <div className={`h-4 w-full max-w-[100px] rounded bg-gray-200 ${shimmer} relative overflow-hidden`} />
       </div>
 
       {/* Location */}
