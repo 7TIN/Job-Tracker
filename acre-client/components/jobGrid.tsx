@@ -42,7 +42,6 @@ type Props = {
 };
 
 export default function JobGrid({ data }: Props) {
-  
   const gridRef = useRef<AgGridReact<Job>>(null);
   const [rowData, setRowData] = useState<Job[]>(data);
 
@@ -72,8 +71,18 @@ export default function JobGrid({ data }: Props) {
       field: "appliedDate",
       editable: true,
       cellEditor: "agDateCellEditor",
-      valueFormatter: (params) =>
-        params.value ? new Date(params.value).toLocaleDateString("en-CA") : "",
+      valueFormatter: (params) => {
+        return params.value || "";
+      },
+      valueParser: (params) => {
+        if (!params.newValue) return null;
+
+        // Convert incoming Date/string into YYYY-MM-DD string
+        const d = new Date(params.newValue);
+        if (isNaN(d.getTime())) return null;
+
+        return d.toISOString().split("T")[0]; // always a string
+      },
     },
     { headerName: "Platform", field: "platform", editable: true },
     {
@@ -112,11 +121,17 @@ export default function JobGrid({ data }: Props) {
   const handleAddRow = () => {
     if (tempRowId) return;
 
+    const today = new Date();
+    const todayString = `${today.getFullYear()}-${String(
+      today.getMonth() + 1
+    ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
     const newRow: Job = {
       id: `temp_${crypto.randomUUID()}`,
       company: "",
       position: "",
-      appliedDate: new Date().toISOString().split("T")[0],
+      // appliedDate: new Date().toISOString().split("T")[0],
+      appliedDate: todayString,
       status: "Applied",
       platform: "",
       applicationLink: "",
@@ -222,6 +237,7 @@ export default function JobGrid({ data }: Props) {
   const handleUpdateRow = async () => {
     if (!dirtyRowId) return;
     setIsUpdating(true);
+
     const gridApi = gridRef.current?.api;
     if (!gridApi) {
       setIsUpdating(false);
@@ -236,14 +252,29 @@ export default function JobGrid({ data }: Props) {
     }
 
     try {
+      // const dataToSend = { ...rowNode.data };
+
+      // if (dataToSend.appliedDate) {
+      //   const d = new Date(dataToSend.appliedDate);
+      //   if (!isNaN(d.getTime())) {
+      //     dataToSend.appliedDate = d.toISOString().split("T")[0];
+      //   } else {
+      //     dataToSend.appliedDate = null;
+      //   }
+      // }
+
       const result = await updateJob(rowNode.data);
+
       if (result.error) {
         toast.error("Failed to update job", { description: result.error });
       } else if (result.success && result.data) {
         toast.success("Job updated successfully!");
+
         gridApi.applyTransaction({ update: [result.data] });
         gridApi.flashCells({ rowNodes: [rowNode] });
-        setDirtyRowId(null); // Hide the update buttons
+
+        setDirtyRowId(null);
+
         originalRowData.current = null;
       }
     } catch (error) {
@@ -274,22 +305,50 @@ export default function JobGrid({ data }: Props) {
         )}
         {tempRowId && (
           <>
-            <Button onClick={handleSaveRow} disabled={isSaving} className="w-fit" variant="outline">
-              {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4 text-green-600" />}
+            <Button
+              onClick={handleSaveRow}
+              disabled={isSaving}
+              className="w-fit"
+              variant="outline"
+            >
+              {isSaving ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Check className="mr-2 h-4 w-4 text-green-600" />
+              )}
               Save
             </Button>
-            <Button onClick={handleCancelAdd} disabled={isSaving} className="w-fit" variant="ghost">
+            <Button
+              onClick={handleCancelAdd}
+              disabled={isSaving}
+              className="w-fit"
+              variant="ghost"
+            >
               <X className="mr-2 h-4 w-4 text-red-600" /> Cancel
             </Button>
           </>
         )}
         {dirtyRowId && (
           <>
-            <Button onClick={handleUpdateRow} disabled={isUpdating} className="w-fit" variant="outline">
-              {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4 text-green-600" />}
+            <Button
+              onClick={handleUpdateRow}
+              disabled={isUpdating}
+              className="w-fit"
+              variant="outline"
+            >
+              {isUpdating ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Check className="mr-2 h-4 w-4 text-green-600" />
+              )}
               Update
             </Button>
-            <Button onClick={handleCancelUpdate} disabled={isUpdating} className="w-fit" variant="ghost">
+            <Button
+              onClick={handleCancelUpdate}
+              disabled={isUpdating}
+              className="w-fit"
+              variant="ghost"
+            >
               <X className="mr-2 h-4 w-4 text-red-600" /> Cancel Update
             </Button>
           </>

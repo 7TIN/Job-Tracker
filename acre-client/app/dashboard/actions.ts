@@ -5,6 +5,13 @@ import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/lib/prisma"; 
 import { revalidatePath } from "next/cache";
 
+
+type JobInput = {
+  appliedDate?: string | Date | null;
+  [key: string]: unknown;
+};
+
+
 const jobSchema = z.object({
   company: z.string().nullable().optional(),
   position: z.string().nullable().optional(),
@@ -17,6 +24,30 @@ const jobSchema = z.object({
   notes: z.string().nullable().optional(),
 });
 
+function addOneDay(dateStr: string): Date {
+  const d = new Date(dateStr);
+  d.setDate(d.getDate() + 1);
+  return d; // return as JS Date object for Prisma
+}
+
+
+function formatDateForDisplay(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function normalizeAppliedDate<T extends JobInput>(data: T): T {
+  if (data && data.appliedDate instanceof Date) {
+    const d = data.appliedDate;
+    data.appliedDate = isNaN(d.getTime())
+      ? null
+      : d.toISOString().split("T")[0]; // convert to string
+  }
+  return data;
+}
+
 export async function createJob(data: unknown) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -25,7 +56,7 @@ export async function createJob(data: unknown) {
     return { error: "You must be logged in to add a job." };
   }
 
-  const validation = jobSchema.safeParse(data);
+  const validation = jobSchema.safeParse(normalizeAppliedDate(data));
   if (!validation.success) {
     return { error: "Invalid data provided. Please check the fields." };
   }
@@ -37,7 +68,7 @@ export async function createJob(data: unknown) {
       data: {
         ...jobData,
 
-        appliedDate: appliedDate ? new Date(appliedDate) : null,
+        appliedDate: appliedDate ? addOneDay(appliedDate) : null,
         userId: user.id,
       },
     });
@@ -49,7 +80,9 @@ export async function createJob(data: unknown) {
 
       data: {
         ...newJob,
-        appliedDate: newJob.appliedDate ? newJob.appliedDate.toISOString().split('T')[0] : null,
+        // appliedDate: newJob.appliedDate ? newJob.appliedDate.toISOString().split('T')[0] : null,
+        appliedDate: newJob.appliedDate ? formatDateForDisplay(newJob.appliedDate)
+          : null,
       },
     };
   } catch (error) {
@@ -70,7 +103,21 @@ export async function updateJob(data: unknown) {
     return { error: "Authentication required." };
   }
 
-  const validation = updateJobSchema.safeParse(data);
+
+  // if (typeof data === "object" && data !== null && "appliedDate" in data) {
+  //   const draft = data as { appliedDate?: unknown };
+
+  //   if (isDate(draft.appliedDate)) {
+  //     const d = draft.appliedDate;
+  //     if (isNaN(d.getTime())) {
+  //       draft.appliedDate = null;
+  //     } else {
+  //       draft.appliedDate = formatDateForDisplay(d);
+  //     }
+  //   }
+  // }
+
+  const validation = updateJobSchema.safeParse(normalizeAppliedDate(data));
   if (!validation.success) {
     console.error("Zod validation failed:", validation.error.issues);
     return { error: "Invalid data for update." };
@@ -86,7 +133,7 @@ export async function updateJob(data: unknown) {
       },
       data: {
         ...jobData,
-        appliedDate: appliedDate ? new Date(appliedDate) : null,
+        appliedDate: appliedDate ? addOneDay(appliedDate) : null,
       },
     });
 
@@ -95,7 +142,8 @@ export async function updateJob(data: unknown) {
       success: true,
       data: {
         ...updatedJob,
-        appliedDate: updatedJob.appliedDate ? updatedJob.appliedDate.toISOString().split('T')[0] : null,
+        // appliedDate: updatedJob.appliedDate ? updatedJob.appliedDate.toISOString().split('T')[0] : null,
+          appliedDate: updatedJob.appliedDate ? formatDateForDisplay(updatedJob.appliedDate) : null,
       },
     };
   } catch (error) {
