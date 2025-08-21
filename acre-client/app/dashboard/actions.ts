@@ -6,10 +6,10 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 
-type JobInput = {
-  appliedDate?: string | Date | null;
-  [key: string]: unknown;
-};
+// type JobInput = {
+//   appliedDate?: string | Date | null;
+//   [key: string]: unknown;
+// };
 
 
 const jobSchema = z.object({
@@ -38,14 +38,19 @@ function formatDateForDisplay(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-function normalizeAppliedDate<T extends JobInput>(data: T): T {
-  if (data && data.appliedDate instanceof Date) {
-    const d = data.appliedDate;
-    data.appliedDate = isNaN(d.getTime())
+function normalizeAppliedDate(data: unknown): Record<string, unknown> {
+  if (
+    data &&
+    typeof data === "object" &&
+    "appliedDate" in data &&
+    data.appliedDate instanceof Date
+  ) {
+    const d = data.appliedDate as Date;
+    (data as Record<string, unknown>).appliedDate = isNaN(d.getTime())
       ? null
-      : d.toISOString().split("T")[0]; // convert to string
+      : d.toISOString().split("T")[0];
   }
-  return data;
+  return data as Record<string, unknown>;
 }
 
 export async function createJob(data: unknown) {
