@@ -373,7 +373,7 @@ export default function JobGrid({ data }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 pr-12">
         {!tempRowId && !dirtyRowId && (
           <Button onClick={handleAddRow} className="w-fit" variant="outline">
             <PlusCircle className="mr-2 h-4 w-4" /> Add Job
