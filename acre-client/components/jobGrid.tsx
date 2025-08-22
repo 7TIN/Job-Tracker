@@ -2,13 +2,20 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
-import { CellValueChangedEvent, ColDef, themeQuartz } from "ag-grid-community";
+import {
+  CellValueChangedEvent,
+  ColDef,
+  RowClickedEvent,
+  themeQuartz,
+} from "ag-grid-community";
 import { Job } from "@/types/job";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { createJob, updateJob } from "@/app/dashboard/actions";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Check, Loader2, PlusCircle, X } from "lucide-react";
+import { Trash2 } from "lucide-react";
+import { deleteJob } from "@/app/dashboard/actions";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -51,6 +58,10 @@ export default function JobGrid({ data }: Props) {
   const [dirtyRowId, setDirtyRowId] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const originalRowData = useRef<Job | null>(null);
+
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     setRowData(data);
@@ -295,11 +306,65 @@ export default function JobGrid({ data }: Props) {
     originalRowData.current = null;
   };
 
+  const onRowClicked = (event: RowClickedEvent<Job>) => {
+    setSelectedRowId(event?.data?.id || null);
+    setConfirmDelete(false);
+  };
+
+  //   const onCellClicked = (event: CellClickedEvent<Job>) => {
+  //   setSelectedRowId(event?.data?.id || null);
+  //   setConfirmDelete(false);
+  // };
+
+  // const onCellFocused = (event: CellFocusedEvent<Job>) => {
+  // if (event.rowIndex == null) {
+  //   // User clicked outside any row
+  //   setSelectedRowId(null);
+  //   setConfirmDelete(false);
+  // }
+  // };
+
+  const handleDeleteRow = async () => {
+    if (!selectedRowId) return;
+    setIsDeleting(true);
+
+    const gridApi = gridRef.current?.api;
+    if (!gridApi) return;
+
+    const rowNode = gridApi?.getRowNode(selectedRowId);
+
+    if (rowNode) {
+      gridApi.flashCells({
+        rowNodes: [rowNode],
+      });
+    }
+
+    try {
+      const result = await deleteJob(selectedRowId);
+      if (result.error) {
+        toast.error("Failed to delete job", { description: result.error });
+      } else {
+        toast.success("Job deleted successfully!");
+
+        if (rowNode && rowNode.data) {
+          gridApi?.applyTransaction({ remove: [rowNode.data] });
+        }
+        gridApi?.refreshClientSideRowModel("sort");
+      }
+    } catch (err) {
+      toast.error("Unexpected error deleting job." + err);
+    } finally {
+      setIsDeleting(false);
+      setSelectedRowId(null);
+      setConfirmDelete(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
         {!tempRowId && !dirtyRowId && (
-          <Button onClick={handleAddRow} className="w-fit">
+          <Button onClick={handleAddRow} className="w-fit" variant = "outline">
             <PlusCircle className="mr-2 h-4 w-4" /> Add Job
           </Button>
         )}
@@ -353,6 +418,50 @@ export default function JobGrid({ data }: Props) {
             </Button>
           </>
         )}
+
+        {selectedRowId && !confirmDelete && (
+          <div className="flex items-center gap-2 ml-auto">
+            <Button
+              onClick={() => setConfirmDelete(true)}
+              variant="ghost"
+              className="w-fit text-red-600"
+            >
+              <Trash2 className="mr-2 h-4 w-4" /> Delete
+            </Button>
+            <Button
+              onClick={() => setSelectedRowId(null)} // hide delete + x
+              variant="ghost"
+              className="w-fit"
+            >
+              <X className="mr-2 h-4 w-4" /> Hide
+            </Button>
+          </div>
+        )}
+
+        {selectedRowId && confirmDelete && (
+          <div className="flex items-center gap-2 ml-auto">
+            <Button
+              onClick={handleDeleteRow}
+              disabled={isDeleting}
+              className="w-fit"
+              variant="destructive"
+            >
+              {isDeleting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Check className="mr-2 h-4 w-4" />
+              )}
+              Confirm
+            </Button>
+            <Button
+              onClick={() => setConfirmDelete(false)}
+              className="w-fit"
+              variant="ghost"
+            >
+              <X className="mr-2 h-4 w-4" /> Cancel
+            </Button>
+          </div>
+        )}
       </div>
       <div className="shadow-xl shadow-neutral-200 rounded-b-xl w-full h-[500px]">
         <AgGridReact<Job>
@@ -366,6 +475,7 @@ export default function JobGrid({ data }: Props) {
           stopEditingWhenCellsLoseFocus={true}
           getRowId={(params) => params.data.id}
           onCellValueChanged={onCellValueChanged}
+          onRowClicked={onRowClicked}
           // editType="fullRow"
         />
       </div>

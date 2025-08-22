@@ -167,3 +167,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+.ag-cell-flash {
+  background-color: #ffcccc !important;
+  transition: background-color 1s ease-in-out;
+}

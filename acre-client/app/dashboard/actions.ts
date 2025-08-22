@@ -156,3 +156,25 @@ export async function updateJob(data: unknown) {
     return { error: "Database error: Could not update the job." };
   }
 }
+
+
+export async function deleteJob(id: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Authentication required." };
+  }
+
+  try {
+    await prisma.job.delete({
+      where: { id, userId: user.id },
+    });
+
+    revalidatePath("/dashboard");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete job:", error);
+    return { error: "Database error: Could not delete the job." };
+  }
+}
