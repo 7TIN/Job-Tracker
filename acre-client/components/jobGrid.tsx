@@ -13,7 +13,7 @@ import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { createJob, updateJob } from "@/app/dashboard/actions";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
-import { Check, Loader2, PlusCircle, X } from "lucide-react";
+import { Check, Download, Loader2, PlusCircle, X } from "lucide-react";
 import { Trash2 } from "lucide-react";
 import { deleteJob } from "@/app/dashboard/actions";
 
@@ -360,11 +360,22 @@ export default function JobGrid({ data }: Props) {
     }
   };
 
+  // Export to CSV
+  const handleExportCSV = () => {
+    const gridApi = gridRef.current?.api;
+    if (gridApi) {
+      gridApi.exportDataAsCsv({
+        fileName: "jobs.csv",
+      });
+      toast.success("CSV downloaded!");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
         {!tempRowId && !dirtyRowId && (
-          <Button onClick={handleAddRow} className="w-fit" variant = "outline">
+          <Button onClick={handleAddRow} className="w-fit" variant="outline">
             <PlusCircle className="mr-2 h-4 w-4" /> Add Job
           </Button>
         )}
@@ -462,6 +473,16 @@ export default function JobGrid({ data }: Props) {
             </Button>
           </div>
         )}
+
+          <Button
+            onClick={handleExportCSV}
+            variant="outline"
+            size="icon"
+            title="Download CSV"
+            className="absolute right-6"
+          >
+            <Download className=" h-4 w-4"/>
+          </Button>
       </div>
       <div className="shadow-xl shadow-neutral-200 rounded-b-xl w-full h-[500px]">
         <AgGridReact<Job>
