@@ -64,12 +64,51 @@ export default function JobGridPreview({ data }: Props) {
   }
 
   return (
+
+<div className="relative">
+      {/* Complete border lines with extensions and fade */}
+      <div className="relative p-8">
+        {/* Top border line with extensions */}
+        <div className="absolute top-0 left-0 right-0 h-0.5">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-border to-transparent"></div>
+          <div className="absolute -left-4 top-0 w-8 h-0.5 bg-gradient-to-r from-transparent to-border"></div>
+          <div className="absolute -right-4 top-0 w-8 h-0.5 bg-gradient-to-l from-transparent to-border"></div>
+        </div>
+        
+        {/* Bottom border line with extensions */}
+        <div className="absolute bottom-0 left-0 right-0 h-0.5">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-border to-transparent"></div>
+          <div className="absolute -left-4 bottom-0 w-8 h-0.5 bg-gradient-to-r from-transparent to-border"></div>
+          <div className="absolute -right-4 bottom-0 w-8 h-0.5 bg-gradient-to-l from-transparent to-border"></div>
+        </div>
+        
+        {/* Left border line with extensions */}
+        <div className="absolute top-0 bottom-0 left-0 w-0.5">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-border to-transparent"></div>
+          <div className="absolute left-0 -top-4 w-0.5 h-8 bg-gradient-to-b from-transparent to-border"></div>
+          <div className="absolute left-0 -bottom-4 w-0.5 h-8 bg-gradient-to-t from-transparent to-border"></div>
+        </div>
+        
+        {/* Right border line with extensions */}
+        <div className="absolute top-0 bottom-0 right-0 w-0.5">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-border to-transparent"></div>
+          <div className="absolute right-0 -top-4 w-0.5 h-8 bg-gradient-to-b from-transparent to-border"></div>
+          <div className="absolute right-0 -bottom-4 w-0.5 h-8 bg-gradient-to-t from-transparent to-border"></div>
+        </div>
+        
+        {/* Corner connection points */}
+        <div className="absolute top-0 left-0 w-0.5 h-0.5 bg-border"></div>
+        <div className="absolute top-0 right-0 w-0.5 h-0.5 bg-border"></div>
+        <div className="absolute bottom-0 left-0 w-0.5 h-0.5 bg-border"></div>
+        <div className="absolute bottom-0 right-0 w-0.5 h-0.5 bg-border"></div>
+
     <div className="relative group animate-float">
       {/* Glow effect */}
-      <div className="absolute -inset-4 bg-primary/20 rounded-2xl blur-xl animate-glow-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute -inset-2 bg-blue-200 rounded-2xl blur-xl animate-glow-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       {/* Main container */}
-      <div className="relative table-tilt group-hover:table-tilt-hover transition-smooth shadow-lg rounded-xl overflow-hidden bg-card border border-border">
+      <div className="relative table-tilt group-hover:table-tilt-hover transition-smooth rounded-xl overflow-hidden bg-card border border-border">
+        
         {/* Header with gradient */}
         <div className="h-2 w-full gradient-primary" />
 
@@ -138,6 +177,8 @@ export default function JobGridPreview({ data }: Props) {
           <span className="text-primary font-medium">{data.length}</span> job applications tracked
         </div>
       </div>
+    </div>
+    </div>
     </div>
   )
 }

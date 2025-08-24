@@ -305,7 +305,7 @@ export default function AnimatedHero() {
       </AnimatePresence>
 
       {/* Central content */}
-      <div className="absolute inset-0 flex items-center justify-center z-20">
+      <div className="absolute inset-0 flex items-center justify-center z-20 overflow-auto">
         <div className="text-center space-y-6">
           <motion.h1
             className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent"

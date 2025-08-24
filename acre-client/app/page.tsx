@@ -100,39 +100,42 @@ export default function Home() {
 
     // </div>
 
-      <div className="min-h-screen bg-background relative overflow-hidden">
+    //   <div className="min-h-screen bg-background relative overflow-hidden">
+    //   {/* Animated hero section */}
+    //   <AnimatedHero />
+
+    //   {/* Existing job grid section */}
+    //   <div className="relative overflow-hidden">
+    //     {/* Background elements */}
+    //     {/* <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/20" />
+    //     <div className="absolute top-1/4 -right-64 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" />
+    //     <div
+    //       className="absolute bottom-1/4 -left-64 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-float"
+    //       style={{ animationDelay: "2s" }}
+    //     /> */}
+
+    //     <div className="relative z-10 container mx-auto px-6 py-20">
+    //       <div className="flex justify-center mb-16">
+    //         <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+    //           <JobGridPreview data={sampleJobs} />
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <div className="min-h-screen w-full bg-background">
       {/* Animated hero section */}
       <AnimatedHero />
 
-      {/* Existing job grid section */}
-      <div className="relative overflow-hidden">
-        {/* Background elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/20" />
-        <div className="absolute top-1/4 -right-64 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" />
-        <div
-          className="absolute bottom-1/4 -left-64 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-float"
-          style={{ animationDelay: "2s" }}
-        />
-
-        <div className="relative z-10 container mx-auto px-6 py-20">
-          {/* Header section */}
-          <div className="text-center mb-16">
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              Job Application Tracker
-            </h1>
-            <p className="text-muted-foreground text-lg">Track your job applications with style and precision</p>
-          </div>
-
+      {/* Job grid section - removed problematic background elements */}
+      <div className="w-full bg-background">
+        <div className="container mx-auto px-6 py-20">
           {/* Preview section */}
           <div className="flex justify-center mb-16">
             <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
               <JobGridPreview data={sampleJobs} />
             </div>
-          </div>
-
-          {/* Features section */}
-          <div className="text-center">
-            <p className="text-muted-foreground">Interactive preview with hover effects and smooth animations</p>
           </div>
         </div>
       </div>
