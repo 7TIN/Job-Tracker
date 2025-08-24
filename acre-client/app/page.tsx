@@ -9,11 +9,10 @@ import sampleJobs from "@/data/sampleJobs";
 // import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 // import { Job } from "@/types/job";
 
-
 export default function Home() {
   return (
     // <div className="flex flex-col items-center text-5xl justify-center min-h-screen space-y-3.5">
-      
+
     //   <div className ="">
     //     Welcome
     //   </div>
@@ -48,22 +47,23 @@ export default function Home() {
     //   </div>
     // </div>
 
-    <div className="min-h-screen w-full bg-background">
+    <div className="min-h-screen w-full bg-gradient-to-b from-background via-background to-secondary/10">
       {/* Animated hero section */}
       <AnimatedHero />
-
+      <div className="h-24 w-full bg-gradient-to-b from-transparent to-background"></div>
       {/* Job grid section - removed problematic background elements */}
-      <div className="w-full bg-background">
-        <div className="container mx-auto px-6 py-20">
-          {/* Preview section */}
-          <div className="flex justify-center mb-16">
-            <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+      <div className="w-full ">
+        <div className="container mx-auto px-4 sm:px-6 py-10 sm:py-20">
+          <div className="mb-10 sm:mb-16 flex justify-center">
+            <div
+              className="w-full max-w-6xl animate-fade-in-up"
+              style={{ animationDelay: "0.3s" }}
+            >
               <JobGridPreview data={sampleJobs} />
             </div>
           </div>
         </div>
       </div>
     </div>
-
   );
 }
