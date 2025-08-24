@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import cellContents from "@/data/cellContents"
+// import { Button } from "./ui/button"
+// import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 interface AnimatedCell {
   id: string
@@ -15,140 +19,14 @@ interface AnimatedCell {
   type: "company" | "position" | "status" | "date" | "location" | "salary" | "skill" | "level"
 }
 
-const cellContents = {
-  company: [
-    "Google",
-    "Microsoft",
-    "Apple",
-    "Meta",
-    "Netflix",
-    "Amazon",
-    "Tesla",
-    "Spotify",
-    "Uber",
-    "Airbnb",
-    "Stripe",
-    "OpenAI",
-    "GitHub",
-    "Figma",
-    "Slack",
-    "Discord",
-    "Zoom",
-    "Adobe",
-    "Salesforce",
-    "Oracle",
-  ],
-  position: [
-    "Software Engineer",
-    "Frontend Developer",
-    "Backend Engineer",
-    "Full Stack Engineer",
-    "DevOps Engineer",
-    "Data Scientist",
-    "Product Manager",
-    "UI/UX Designer",
-    "Mobile Developer",
-    "Cloud Architect",
-    "Security Engineer",
-    "ML Engineer",
-    "QA Engineer",
-    "Site Reliability Engineer",
-  ],
-  status: [
-    "Applied",
-    "Interview",
-    "Rejected",
-    "Pending",
-    "Offer",
-    "Negotiating",
-    "Accepted",
-    "Withdrawn",
-    "On Hold",
-    "Follow Up",
-    "Phone Screen",
-    "Technical Round",
-    "Final Round",
-  ],
-  date: [
-    "2025-01-15",
-    "2025-03-12",
-    "2025-01-08",
-    "2025-04-03",
-    "2025-02-01",
-    "2025-09-05",
-    "2025-03-10",
-    "2025-02-15",
-    "2025-03-01",
-    "2024-06-08",
-    "2025-03-12",
-    "2025-08-20",
-  ],
-  location: [
-    "Mountain View, CA",
-    "Seattle, WA",
-    "Menlo Park, CA",
-    "Austin, TX",
-    "New York, NY",
-    "San Francisco, CA",
-    "Los Angeles, CA",
-    "Boston, MA",
-    "Chicago, IL",
-    "Denver, CO",
-    "Portland, OR",
-    "Remote",
-    "Hybrid",
-  ],
-  salary: [
-    "$150,000",
-    "$140,000",
-    "$155,000",
-    "$135,000",
-    "$160,000",
-    "$145,000",
-    "$170,000",
-    "$125,000",
-    "$180,000",
-    "$165,000",
-    "$190,000",
-    "$200,000+",
-  ],
-  skill: [
-    "React",
-    "Node.js",
-    "Python",
-    "TypeScript",
-    "AWS",
-    "Docker",
-    "Kubernetes",
-    "GraphQL",
-    "MongoDB",
-    "PostgreSQL",
-    "Redis",
-    "Next.js",
-    "Vue.js",
-    "Angular",
-    "Go",
-    "Rust",
-  ],
-  level: [
-    "Junior",
-    "Mid-Level",
-    "Senior",
-    "Lead",
-    "Principal",
-    "Staff",
-    "Entry Level",
-    "Intern",
-    "Contractor",
-    "Part-Time",
-    "Full-Time",
-    "Freelance",
-  ],
-}
-
 export default function AnimatedHero() {
+  const router = useRouter();
+
+  const handleStart = () => {
+    router.push('/dashboard');
+  };
   const [cells, setCells] = useState<AnimatedCell[]>([])
-  const [usedPositions, setUsedPositions] = useState<Set<string>>(new Set())
+  // const [usedPositions, setUsedPositions] = useState<Set<string>>(new Set())
 
   const generateRandomCell = (): AnimatedCell => {
     const angle = Math.random() * 360
@@ -160,7 +38,7 @@ export default function AnimatedHero() {
     const y = centerY + Math.sin((angle * Math.PI) / 180) * distance
 
     // Check for position conflicts
-    const positionKey = `${Math.round(x / 50)}-${Math.round(y / 50)}`
+    // const positionKey = `${Math.round(x / 50)}-${Math.round(y / 50)}`
 
     const types = Object.keys(cellContents) as Array<keyof typeof cellContents>
     const randomType = types[Math.floor(Math.random() * types.length)]
@@ -328,29 +206,12 @@ export default function AnimatedHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.1 }}
           >
-            <button className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105">
+            <button onClick={handleStart} className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105">
               Get Started
             </button>
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      {/* <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 2 }}
-      >
-        <div className="flex flex-col items-center space-y-2 text-muted-foreground">
-          <span className="text-sm">Scroll to explore</span>
-          <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}>
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </motion.div>
-        </div>
-      </motion.div> */}
     </div>
   )
 }

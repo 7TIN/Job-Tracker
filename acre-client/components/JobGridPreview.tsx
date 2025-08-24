@@ -67,40 +67,40 @@ export default function JobGridPreview({ data }: Props) {
 
 <div className="relative">
       {/* Complete border lines with extensions and fade */}
-      <div className="relative p-8">
+<div className="relative p-30">
         {/* Top border line with extensions */}
-        <div className="absolute top-0 left-0 right-0 h-0.5">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-border to-transparent"></div>
-          <div className="absolute -left-4 top-0 w-8 h-0.5 bg-gradient-to-r from-transparent to-border"></div>
-          <div className="absolute -right-4 top-0 w-8 h-0.5 bg-gradient-to-l from-transparent to-border"></div>
-        </div>
-        
-        {/* Bottom border line with extensions */}
-        <div className="absolute bottom-0 left-0 right-0 h-0.5">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-border to-transparent"></div>
-          <div className="absolute -left-4 bottom-0 w-8 h-0.5 bg-gradient-to-r from-transparent to-border"></div>
-          <div className="absolute -right-4 bottom-0 w-8 h-0.5 bg-gradient-to-l from-transparent to-border"></div>
-        </div>
-        
-        {/* Left border line with extensions */}
-        <div className="absolute top-0 bottom-0 left-0 w-0.5">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-border to-transparent"></div>
-          <div className="absolute left-0 -top-4 w-0.5 h-8 bg-gradient-to-b from-transparent to-border"></div>
-          <div className="absolute left-0 -bottom-4 w-0.5 h-8 bg-gradient-to-t from-transparent to-border"></div>
-        </div>
-        
-        {/* Right border line with extensions */}
-        <div className="absolute top-0 bottom-0 right-0 w-0.5">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-border to-transparent"></div>
-          <div className="absolute right-0 -top-4 w-0.5 h-8 bg-gradient-to-b from-transparent to-border"></div>
-          <div className="absolute right-0 -bottom-4 w-0.5 h-8 bg-gradient-to-t from-transparent to-border"></div>
-        </div>
-        
-        {/* Corner connection points */}
-        <div className="absolute top-0 left-0 w-0.5 h-0.5 bg-border"></div>
-        <div className="absolute top-0 right-0 w-0.5 h-0.5 bg-border"></div>
-        <div className="absolute bottom-0 left-0 w-0.5 h-0.5 bg-border"></div>
-        <div className="absolute bottom-0 right-0 w-0.5 h-0.5 bg-border"></div>
+<div className="absolute top-0 left-0 right-0 h-px">
+  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-neutral-600 to-transparent"></div>
+  <div className="absolute -left-4 top-0 w-8 h-px bg-gradient-to-r from-transparent to-neutral-600"></div>
+  <div className="absolute -right-4 top-0 w-8 h-px bg-gradient-to-l from-transparent to-neutral-600"></div>
+</div>
+
+{/* Bottom border line with extensions */}
+<div className="absolute bottom-0 left-0 right-0 h-px">
+  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-neutral-600 to-transparent"></div>
+  <div className="absolute -left-4 bottom-0 w-8 h-px bg-gradient-to-r from-transparent to-neutral-600"></div>
+  <div className="absolute -right-4 bottom-0 w-8 h-px bg-gradient-to-l from-transparent to-neutral-600"></div>
+</div>
+
+{/* Left border line with extensions */}
+<div className="absolute top-0 bottom-0 left-0 w-px">
+  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-600 to-transparent"></div>
+  <div className="absolute left-0 -top-4 w-px h-8 bg-gradient-to-b from-transparent to-neutral-600"></div>
+  <div className="absolute left-0 -bottom-4 w-px h-8 bg-gradient-to-t from-transparent to-neutral-600"></div>
+</div>
+
+{/* Right border line with extensions */}
+<div className="absolute top-0 bottom-0 right-0 w-px">
+  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-600 to-transparent"></div>
+  <div className="absolute right-0 -top-4 w-px h-8 bg-gradient-to-b from-transparent to-neutral-600"></div>
+  <div className="absolute right-0 -bottom-4 w-px h-8 bg-gradient-to-t from-transparent to-neutral-600"></div>
+</div>
+
+{/* Corner connection points */}
+<div className="absolute top-0 left-0 w-px h-px bg-neutral-600"></div>
+<div className="absolute top-0 right-0 w-px h-px bg-neutral-600"></div>
+<div className="absolute bottom-0 left-0 w-px h-px bg-neutral-600"></div>
+<div className="absolute bottom-0 right-0 w-px h-px bg-neutral-600"></div>
 
     <div className="relative group animate-float">
       {/* Glow effect */}

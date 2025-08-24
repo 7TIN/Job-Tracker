@@ -39,21 +39,37 @@ export async function middleware(request: NextRequest) {
 
   // Handle user authentication
   const { supabaseResponse, user } = await updateSession(request);
-  const isAuthRoute = ["/login", "/register", "/forgot-password"].some((path) =>
+  
+  
+  
+//   const isAuthRoute = ["/login", "/register", "/forgot-password"].some((path) =>
+//     pathname.startsWith(path)
+//   );
+
+//   if (!user && !isAuthRoute) {
+//     return NextResponse.redirect(new URL("/login", request.url));
+//   }
+
+//   if (user && isAuthRoute) {
+//     return NextResponse.redirect(new URL("/dashboard", request.url));
+//   }
+
+//   return supabaseResponse;
+// }
+  const isPublicRoute = ["/", "/login", "/register", "/forgot-password"].some((path) =>
     pathname.startsWith(path)
   );
 
-  if (!user && !isAuthRoute) {
+  if (!user && !isPublicRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (user && isAuthRoute) {
+  if (user && (pathname.startsWith("/login") || pathname.startsWith("/register"))) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
+
   }
-
-  return supabaseResponse;
+    return supabaseResponse;
 }
-
 export const config = {
   matcher: [
      /*
