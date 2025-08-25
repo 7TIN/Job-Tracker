@@ -16,6 +16,8 @@ import { Button } from "./ui/button";
 import { Check, Download, Loader2, PlusCircle, X } from "lucide-react";
 import { Trash2 } from "lucide-react";
 import { deleteJob } from "@/app/dashboard/actions";
+import { GlowingEffect } from "./ui/glowing-effect";
+import { GlowingButton } from "./ui/glowing-button";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -71,9 +73,9 @@ export default function JobGrid({ data }: Props) {
     {
       headerName: "#",
       valueGetter: "node.rowIndex + 1",
-      width: 60,
       suppressMovable: true,
       pinned: "left",
+      maxWidth: 40,
     },
     { headerName: "Company", field: "company", editable: true },
     { headerName: "Position", field: "position", editable: true },
@@ -374,14 +376,15 @@ export default function JobGrid({ data }: Props) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2 md:gap-3">
+        {/* --- Button logic remains unchanged --- */}
         {!tempRowId && !dirtyRowId && (
-          <Button onClick={handleAddRow} className="w-fit" variant="outline">
+          <GlowingButton onClick={handleAddRow} className="w-fit" variant="outline">
             <PlusCircle className="mr-2 h-4 w-4" /> Add Job
-          </Button>
+          </GlowingButton>
         )}
         {tempRowId && (
           <>
-            <Button
+            <GlowingButton
               onClick={handleSaveRow}
               disabled={isSaving}
               className="w-fit"
@@ -393,20 +396,20 @@ export default function JobGrid({ data }: Props) {
                 <Check className="mr-2 h-4 w-4 text-green-600" />
               )}
               Save
-            </Button>
-            <Button
+            </GlowingButton>
+            <GlowingButton
               onClick={handleCancelAdd}
               disabled={isSaving}
               className="w-fit"
               variant="ghost"
             >
               <X className="mr-2 h-4 w-4 text-red-600" /> Cancel
-            </Button>
+            </GlowingButton>
           </>
         )}
         {dirtyRowId && (
           <>
-            <Button
+            <GlowingButton
               onClick={handleUpdateRow}
               disabled={isUpdating}
               className="w-fit"
@@ -418,40 +421,40 @@ export default function JobGrid({ data }: Props) {
                 <Check className="mr-2 h-4 w-4 text-green-600" />
               )}
               Update
-            </Button>
-            <Button
+            </GlowingButton>
+            <GlowingButton
               onClick={handleCancelUpdate}
               disabled={isUpdating}
               className="w-fit"
               variant="ghost"
             >
               <X className="mr-2 h-4 w-4 text-red-600" /> Cancel Update
-            </Button>
+            </GlowingButton>
           </>
         )}
 
         {selectedRowId && !confirmDelete && (
           <div className="flex items-center gap-2 md:gap-3 ml-auto">
-            <Button
+            <GlowingButton
               onClick={() => setConfirmDelete(true)}
               variant="ghost"
               className="w-fit text-red-600"
             >
               <Trash2 className="mr-2 h-4 w-4" /> Delete
-            </Button>
-            <Button
-              onClick={() => setSelectedRowId(null)} // hide delete + x
+            </GlowingButton>
+            <GlowingButton
+              onClick={() => setSelectedRowId(null)}
               variant="ghost"
               className="w-fit"
             >
               <X className="mr-2 h-4 w-4" /> Hide
-            </Button>
+            </GlowingButton>
           </div>
         )}
 
         {selectedRowId && confirmDelete && (
           <div className="flex items-center gap-2 md:gap-3 ml-auto">
-            <Button
+            <GlowingButton
               onClick={handleDeleteRow}
               disabled={isDeleting}
               className="w-fit"
@@ -463,54 +466,54 @@ export default function JobGrid({ data }: Props) {
                 <Check className="mr-2 h-4 w-4" />
               )}
               Confirm
-            </Button>
-            <Button
+            </GlowingButton>
+            <GlowingButton
               onClick={() => setConfirmDelete(false)}
               className="w-fit"
               variant="ghost"
             >
               <X className="mr-2 h-4 w-4" /> Cancel
-            </Button>
+            </GlowingButton>
           </div>
         )}
 
         {!selectedRowId && (
           <div className="ml-auto">
-            <Button onClick={handleExportCSV} variant="outline" size="icon" title="Download CSV">
+            <GlowingButton onClick={handleExportCSV} variant="outline" size="icon" title="Download CSV">
               <Download className="h-4 w-4" />
-            </Button>
+            </GlowingButton>
           </div>
         )}
+      </div>
 
-          {/* <Button
-            onClick={handleExportCSV}
-            variant="outline"
-            size="icon"
-            title="Download CSV"
-            className="absolute right-6"
-          >
-            <Download className=" h-4 w-4"/>
-          </Button> */}
-      </div>
-      <div className="w-full rounded-b-xl shadow-xl shadow-neutral-200">
-        <div className="w-full h-[60vh] min-h-72 max-h-[80vh]">
-        <AgGridReact<Job>
-          ref={gridRef}
-          rowData={rowData}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          animateRows={true}
-          pagination={true}
-          theme={myTheme}
-          stopEditingWhenCellsLoseFocus={true}
-          getRowId={(params) => params.data.id}
-          onCellValueChanged={onCellValueChanged}
-          onRowClicked={onRowClicked}
-          suppressHorizontalScroll={false}
-          // editType="fullRow"
+      {/* 2. Main container for the grid with the glowing effect */}
+      <div className="relative w-full rounded-xl p-px shadow-xl shadow-neutral-200">
+        <GlowingEffect
+          spread={25}
+          glow={true}
+          disabled={false} // Make sure the effect is enabled
+          proximity={48}
+          inactiveZone={0.8}
+          borderWidth={1}
+          // You can also add a blur here if you like, e.g., blur={10}
         />
+        <div className="relative w-full h-[60vh] min-h-72 max-h-[80vh] rounded-[inherit] overflow-hidden">
+          <AgGridReact<Job>
+            ref={gridRef}
+            rowData={rowData}
+            columnDefs={columnDefs}
+            defaultColDef={defaultColDef}
+            animateRows={true}
+            pagination={true}
+            theme={myTheme}
+            stopEditingWhenCellsLoseFocus={true}
+            getRowId={(params) => params.data.id}
+            onCellValueChanged={onCellValueChanged}
+            onRowClicked={onRowClicked}
+            suppressHorizontalScroll={false}
+          />
+        </div>
       </div>
-    </div>
     </div>
   );
 }
