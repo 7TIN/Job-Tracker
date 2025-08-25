@@ -146,7 +146,7 @@ export default function AnimatedHero() {
           return (
             <motion.div
               key={cell.id}
-              className="absolute pointer-events-none z-10"
+              className="absolute pointer-events-none z-10 rounded-lg"
               initial={{
                 x: centerX,
                 y: centerY,
