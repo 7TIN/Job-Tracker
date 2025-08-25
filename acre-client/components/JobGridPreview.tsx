@@ -122,7 +122,7 @@ export default function JobGridPreview({ data }: Props) {
             {/* Table container */}
             <div
               ref={containerRef}
-              className="w-full h-auto sm:h-[400px] relative overflow-x-auto"
+              className="w-full h-[400px] sm:h-[320px] relative overflow-x-auto"
               onMouseMove={handleMouseMove}
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}

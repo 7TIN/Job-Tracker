@@ -73,6 +73,30 @@ const sampleJobs: Job[] = [
     location: "New York, NY",
     salary: "$125,000",
   },
+    {
+    company: "Airbnb",
+    position: "Data Scientist",
+    status: "Interview",
+    appliedDate: "2024-02-01",
+    location: "San Francisco, CA",
+    salary: "$160,000",
+  },
+  {
+    company: "Stripe",
+    position: "Backend Engineer",
+    status: "Applied",
+    appliedDate: "2024-02-09",
+    location: "Seattle, WA",
+    salary: "$155,000",
+  },
+  {
+    company: "Salesforce",
+    position: "Solution Engineer",
+    status: "Negotiating",
+    appliedDate: "2024-02-11",
+    location: "San Francisco, CA",
+    salary: "$165,000",
+  },
 ]
 
 export default sampleJobs;

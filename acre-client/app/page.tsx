@@ -47,10 +47,10 @@ export default function Home() {
     //   </div>
     // </div>
 
-    <div className="min-h-screen w-full ">
+    <div className="min-h-screen w-full bg-gradient-to-b from-background via-background to-secondary/10">
       {/* Animated hero section */}
       <AnimatedHero />
-      {/* <div className="h-24 w-full bg-gradient-to-b from-transparent to-background"></div> */}
+      <div className="h-24 w-full bg-gradient-to-b from-transparent to-background">
       {/* Job grid section - removed problematic background elements */}
       <div className="w-full ">
         <div className="container mx-auto px-4 sm:px-6 py-10 sm:py-20">
@@ -63,6 +63,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
