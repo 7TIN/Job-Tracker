@@ -118,7 +118,7 @@ export function NavbarDemo() {
                     setIsMobileMenuOpen(false);
                   }}
                   variant="primary"
-                  className="w-full"
+                  className="w-full text-neutral-600"
                 >
                   Logout
                 </NavbarButton>

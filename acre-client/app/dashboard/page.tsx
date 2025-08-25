@@ -63,12 +63,9 @@ import JobTable from "./JobTable";
 
 export default function DashboardPage() {
   return (
-    <main className="p-6 mx-auto">
-      <h1 className="text-2xl font-bold mb-4 pb-15">Job Tracker</h1>
-      <Suspense 
-      // fallback={<JobGridSkeleton />}
-      fallback={<JobGridSkeleton />}
-      >
+    <main className="mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 max-w-7xl">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">Job Tracker</h1>
+      <Suspense fallback={<JobGridSkeleton />} >
       <JobTable /> 
       </Suspense>
     </main>

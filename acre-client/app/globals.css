@@ -27,6 +27,16 @@ body {
   scrollbar-color: rgba(100, 100, 100, 0.3) transparent;
 }
 
+
+.ag-root-wrapper-body,
+.ag-body-horizontal-scroll,
+.ag-paging-panel {
+  overflow-x: hidden !important;
+}
+
+.ag-body-horizontal-scroll {
+  display: none !important;
+}
 /* :root {
   --background:#ffffff;
   --foreground:  #171717;
@@ -417,9 +427,27 @@ body {
   }
 }
 
-
 .fog-reveal-small {
   animation: fogReveal 0.3s ease-out;
   backdrop-filter: blur(0.3px);
   -webkit-backdrop-filter: blur(0.3px);
+}
+
+.ag-paging-panel {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* hide row summary on very small screens */
+@media (max-width: 480px) {
+  .ag-paging-row-summary-panel {
+    display: none !important;
+  }
+  .ag-paging-page-summary-panel {
+    flex: 1;
+    justify-content: center;
+  }
 }

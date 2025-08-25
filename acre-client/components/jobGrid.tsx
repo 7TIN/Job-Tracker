@@ -373,7 +373,7 @@ export default function JobGrid({ data }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2 pr-12">
+      <div className="flex flex-wrap items-center gap-2 md:gap-3">
         {!tempRowId && !dirtyRowId && (
           <Button onClick={handleAddRow} className="w-fit" variant="outline">
             <PlusCircle className="mr-2 h-4 w-4" /> Add Job
@@ -431,7 +431,7 @@ export default function JobGrid({ data }: Props) {
         )}
 
         {selectedRowId && !confirmDelete && (
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="flex items-center gap-2 md:gap-3 ml-auto">
             <Button
               onClick={() => setConfirmDelete(true)}
               variant="ghost"
@@ -450,7 +450,7 @@ export default function JobGrid({ data }: Props) {
         )}
 
         {selectedRowId && confirmDelete && (
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="flex items-center gap-2 md:gap-3 ml-auto">
             <Button
               onClick={handleDeleteRow}
               disabled={isDeleting}
@@ -474,7 +474,15 @@ export default function JobGrid({ data }: Props) {
           </div>
         )}
 
-          <Button
+        {!selectedRowId && (
+          <div className="ml-auto">
+            <Button onClick={handleExportCSV} variant="outline" size="icon" title="Download CSV">
+              <Download className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+
+          {/* <Button
             onClick={handleExportCSV}
             variant="outline"
             size="icon"
@@ -482,9 +490,10 @@ export default function JobGrid({ data }: Props) {
             className="absolute right-6"
           >
             <Download className=" h-4 w-4"/>
-          </Button>
+          </Button> */}
       </div>
-      <div className="shadow-xl shadow-neutral-200 rounded-b-xl w-full h-[500px]">
+      <div className="w-full rounded-b-xl shadow-xl shadow-neutral-200">
+        <div className="w-full h-[60vh] min-h-72 max-h-[80vh]">
         <AgGridReact<Job>
           ref={gridRef}
           rowData={rowData}
@@ -497,9 +506,11 @@ export default function JobGrid({ data }: Props) {
           getRowId={(params) => params.data.id}
           onCellValueChanged={onCellValueChanged}
           onRowClicked={onRowClicked}
+          suppressHorizontalScroll={false}
           // editType="fullRow"
         />
       </div>
+    </div>
     </div>
   );
 }
