@@ -75,7 +75,7 @@ export default function JobGrid({ data }: Props) {
       valueGetter: "node.rowIndex + 1",
       suppressMovable: true,
       pinned: "left",
-      maxWidth: 40,
+      maxWidth: 60,
     },
     { headerName: "Company", field: "company", editable: true },
     { headerName: "Position", field: "position", editable: true },

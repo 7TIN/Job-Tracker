@@ -1,3 +1,5 @@
+// Update your acre-client/app/api/jobs/route.ts file with this code
+
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 import { prisma } from '@/lib/prisma';
@@ -16,16 +18,78 @@ const jobSchema = z.object({
   notes: z.string().nullable().optional(),
 });
 
-// Helper function to handle date formatting for Prisma
-// function addOneDay(dateStr: string): Date {
-//   const d = new Date(dateStr);
-//   d.setDate(d.getDate() + 1);
-//   return d;
-// }
+// Helper function to create Supabase client with Bearer token support
+async function createClientWithAuth(request: Request) {
+  // First try to get the Bearer token from Authorization header
+  const authHeader = request.headers.get('Authorization');
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.replace('Bearer ', '');
+    
+    // Create a client with the access token
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        global: {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      }
+    );
+    
+    return supabase;
+  }
+  
+  // Fallback to cookie-based auth (for browser requests)
+  return await createClient();
+}
 
+// GET method for testing authentication
+export async function GET(request: Request) {
+  const supabase = await createClientWithAuth(request);
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized - No user found' }, { status: 401 });
+  }
+
+  try {
+    // Get user's jobs to test database connection
+    const userJobs = await prisma.job.findMany({
+      where: { userId: user.id },
+      take: 5 // Just get the latest 5 for testing
+    });
+
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Authentication successful!',
+      user: {
+        id: user.id,
+        email: user.email
+      },
+      jobCount: userJobs.length,
+      recentJobs: userJobs
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Authentication successful, but database error',
+      user: {
+        id: user.id,
+        email: user.email
+      },
+      error: 'Database connection failed'
+    }, { status: 200 });
+  }
+}
+
+// POST method (your existing code)
 export async function POST(request: Request) {
-  // Create a Supabase client that automatically reads the user's session from the request cookies
-  const supabase = await createClient();
+  // Create a Supabase client that handles both Bearer token and cookies
+  const supabase = await createClientWithAuth(request);
   const { data: { user } } = await supabase.auth.getUser();
 
   // If no user is found in the session, return an unauthorized error
