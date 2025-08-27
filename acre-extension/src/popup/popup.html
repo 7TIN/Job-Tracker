@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { 
+            width: 320px; 
+            padding: 20px; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0;
+        }
+        .container { text-align: center; }
+        .logo { font-size: 24px; margin-bottom: 16px; font-weight: 600; }
+        .status { 
+            padding: 12px; 
+            border-radius: 8px; 
+            margin-bottom: 16px; 
+            font-weight: 500;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        
+        .btn { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            margin: 8px 0;
+            transition: transform 0.2s ease;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn:disabled { 
+            background: #6c757d; 
+            cursor: not-allowed; 
+            transform: none;
+        }
+        
+        .btn.secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .btn.danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+        
+        .info-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 12px;
+            line-height: 1.4;
+        }
+        
+        .feature-list {
+            text-align: left;
+            margin: 16px 0;
+            padding-left: 20px;
+            font-size: 13px;
+            color: #495057;
+        }
+        
+        .feature-list li {
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-list li::before {
+            content: "✨";
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">💼 Job Tracker</div>
+        
+        <div id="status" class="status info">Checking connection...</div>
+        
+        <!-- Not Authenticated State -->
+        <div id="not-authenticated" style="display: none;">
+            <p>Connect your extension to save jobs automatically!</p>
+            
+            <ul class="feature-list">
+                <li>Auto-detect job details</li>
+                <li>One-click job saving</li>
+                <li>Sync with your dashboard</li>
+            </ul>
+            
+            <button id="connect-google-btn" class="btn">
+                🔗 Connect with Google
+            </button>
+            
+            <button id="connect-email-btn" class="btn secondary">
+                📧 Connect with Email
+            </button>
+            
+            <div class="info-text">
+                You'll be redirected to your web app to complete authentication.
+            </div>
+        </div>
+        
+        <!-- Authenticated State -->
+        <div id="authenticated" style="display: none;">
+            <div class="status success">✅ Connected Successfully!</div>
+            
+            <div style="margin: 16px 0; font-size: 14px; color: #495057;">
+                Extension is ready to save jobs from:
+                <br>
+                <strong>LinkedIn • Indeed • Glassdoor</strong>
+            </div>
+            
+            <button id="disconnect-btn" class="btn danger">
+                🔓 Disconnect
+            </button>
+            
+            <div class="info-text">
+                Look for the "💼 Save Job" button when browsing job sites.
+            </div>
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loading" style="display: none;">
+            <div style="padding: 20px;">
+                <div style="border: 3px solid #f3f3f3; border-top: 3px solid #667eea; 
+                           border-radius: 50%; width: 30px; height: 30px; 
+                           animation: spin 1s linear infinite; margin: 0 auto 16px;"></div>
+                <div>Connecting...</div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="./dist/popup.js"></script>
+</body>
+</html>
