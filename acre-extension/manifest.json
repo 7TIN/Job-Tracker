@@ -10,10 +10,10 @@
   ],
   "host_permissions": [
     "http://localhost:3000/*",
-    "https://your-production-domain.com/*"
+    "https://job-trackerz.vercel.app/*"
   ],
   "background": {
-    "service_worker": "dist/background.js",
+    "service_worker": "background.js",
     "type": "module"
   },
   "content_scripts": [
@@ -24,7 +24,7 @@
         "*://*.glassdoor.com/Job/*"
       ],
       "js": [
-        "dist/content-scripts.js"
+        "content-scripts.js"
       ]
     }
   ],

@@ -1,9 +1,9 @@
 import { supabase } from '../shared/supabase';
 import type { ChromeMessage, JobPayload } from '../shared/types';
 
-const WEB_APP_URL = 'http://localhost:3000';
+const WEB_APP_URL = 'https://job-trackerz.vercel.app/*';
 
-chrome.runtime.onMessage.addListener((request: ChromeMessage, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request: ChromeMessage, _sender, sendResponse) => {
   switch (request.action) {
     case 'openAuthTab':
       handleAuthTab(request.url);
@@ -37,7 +37,7 @@ function handleAuthTab(authUrl: string): void {
 type OnUpdatedCallback = Parameters<typeof chrome.tabs.onUpdated.addListener>[0];
 
 async function handleTabUpdate(...args: Parameters<OnUpdatedCallback>): Promise<void> {
-  const [tabId, changeInfo, tab] = args;
+  const [_tabId, changeInfo, tab] = args;
 
   if (changeInfo.status === 'complete' && tab.url) {
     const url = new URL(tab.url);
