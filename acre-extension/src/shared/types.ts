@@ -29,4 +29,4 @@ export type ChromeMessage =
   | { action: 'checkAuth' }
   | { action: 'clearAuth' }
   | { action: 'createJob'; jobData: JobPayload }
-  | { action: 'authSuccess'; tokens: AuthTokens };
+  | { action: 'authSuccess'};
