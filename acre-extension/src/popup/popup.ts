@@ -15,16 +15,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Button: Google login
-  (document.getElementById("connect-google-btn") as HTMLButtonElement).addEventListener("click", async () => {
+  (document.getElementById("login") as HTMLButtonElement).addEventListener("click", async () => {
     showLoading();
-    chrome.runtime.sendMessage({ action: "loginWithGoogle" });
+    chrome.runtime.sendMessage({ action: "loginUser" });
   });
 
-  // Button: Email login
-  (document.getElementById("connect-email-btn") as HTMLButtonElement).addEventListener("click", async () => {
-    showLoading();
-    chrome.runtime.sendMessage({ action: "loginWithEmail" });
-  });
+  // // Button: Email login
+  // (document.getElementById("connect-email-btn") as HTMLButtonElement).addEventListener("click", async () => {
+  //   showLoading();
+  //   chrome.runtime.sendMessage({ action: "loginWithEmail" });
+  // });
 
   // Button: Disconnect
   (document.getElementById("disconnect-btn") as HTMLButtonElement).addEventListener("click", async () => {

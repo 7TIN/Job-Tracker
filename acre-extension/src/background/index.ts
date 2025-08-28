@@ -1,19 +1,14 @@
 import { storeTokens, clearAuth, getCurrentUser } from '../shared/auth';
 import type { ChromeMessage } from '../shared/types';
 
-const WEB_APP_URL = 'http://localhost:3000'; // or your deployed domain
+const WEB_APP_URL = 'http://localhost:3000'; // Change to your deployed domain in prod
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   (async () => {
     try {
       switch (message.action) {
-        case "loginWithGoogle":
-          await chrome.tabs.create({
-            url: `${WEB_APP_URL}/auth/callback?from_extension=true`,
-          });
-          break;
-
-        case "loginWithEmail":
+        case "loginUser":
+          // 🔹 Always start login flow at Next.js login page with ?from_extension=true
           await chrome.tabs.create({
             url: `${WEB_APP_URL}/login?from_extension=true`,
           });
@@ -38,10 +33,10 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     }
   })();
 
-  return true;
+  return true; // keep channel open
 });
 
-// 🔹 Watch for the Next.js redirect after auth
+// 🔹 Watch for redirect after successful login
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.url) {
     try {
@@ -56,10 +51,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
           if (tabId) chrome.tabs.remove(tabId);
 
-          // Notify popup
-          const authSuccessMessage: ChromeMessage = {
-            action: 'authSuccess',
-          };
+          // Notify popup that login was successful
+          const authSuccessMessage: ChromeMessage = { action: 'authSuccess' };
           chrome.runtime.sendMessage(authSuccessMessage).catch(() => {});
         }
       }
