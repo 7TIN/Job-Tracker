@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { passwordSchema } from "@/validation/passwordSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,6 +36,7 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+    const searchParams = useSearchParams();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -58,14 +59,28 @@ export default function LoginForm() {
       password: data.password,
     });
 
+    // if (response.error) {
+    //   toast.error("Login Failed", {
+    //     description: response.message,
+    //   });
+    //   setServerError(response.message);
+    // } else {
+    //   router.push("/dashboard");
+    // }
+
     if (response.error) {
-      toast.error("Login Failed", {
-        description: response.message,
-      });
-      setServerError(response.message);
-    } else {
-      router.push("/dashboard");
-    }
+  toast.error("Login Failed", { description: response.message });
+  setServerError(response.message);
+} else {
+  const fromExtension = searchParams.get("from_extension");
+  if (fromExtension === "true") {
+    // force redirect through callback so tokens flow to extension
+    router.push(`/auth/callback?from_extension=true`);
+  } else {
+    router.push("/dashboard");
+  }
+}
+
   } catch (error) {
     let errorMessage = "An unexpected error occurred. Please try again.";
     if (error instanceof Error) {

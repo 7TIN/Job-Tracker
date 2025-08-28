@@ -16,12 +16,18 @@ export default function GoogleSignin() {
 
   const next = searchParams.get("next");
 
+  const fromExtension = searchParams.get("from_extension");
+
 async function signInWithGoogle() {
   setIsGoogleLoading(true);
   try {
-    const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback${
+    let redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback${
       next ? `?next=${encodeURIComponent(next)}` : ""
     }`;
+
+    if (fromExtension === "true") {
+        redirectTo += next ? "&from_extension=true" : "?from_extension=true";
+      }
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
