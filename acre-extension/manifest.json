@@ -3,11 +3,7 @@
   "name": "Job Tracker",
   "version": "1.0.0",
   "description": "Automatically save job applications to your dashboard.",
-  "permissions": [
-    "storage",
-    "tabs",
-    "activeTab"
-  ],
+  "permissions": ["storage", "tabs"],
   "host_permissions": [
     "http://localhost:3000/*",
     "https://job-trackerz.vercel.app/*"
@@ -21,25 +17,41 @@
       "matches": [
         "*://*.linkedin.com/jobs/view/*",
         "*://*.indeed.com/viewjob*",
-        "*://*.glassdoor.com/Job/*"
+        "*://*.indeed.co.in/viewjob*",
+        "*://*.glassdoor.com/Job/*",
+        "*://*.glassdoor.co.in/Job/*",
+        "*://*.naukri.com/job-listings/*",
+        "*://*.foundit.in/*job*",
+        "*://*.timesjobs.com/job-detail/*",
+        "*://*.shine.com/jobs/*",
+        "*://*.wellfound.com/jobs/*",
+        "*://*.freshersworld.com/*job*",
+        "*://*.instahyre.com/job/*",
+        "*://*.cutshort.io/job/*",
+        "*://*.workindia.in/*job*",
+        "*://*.ziprecruiter.com/jobs/*",
+        "*://*.simplyhired.com/job/*",
+        "*://*.hired.com/job/*",
+        "*://*.dice.com/job-detail/*",
+        "*://*.flexjobs.com/jobs/*",
+        "*://*.remote.co/remote-jobs/*",
+        "*://*.weworkremotely.com/*"
       ],
-      "js": [
-        "content-scripts.js"
-      ]
+      "js": ["content-scripts.js"]
     }
   ],
   "action": {
     "default_popup": "popup.html",
     "default_title": "Job Tracker",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
     }
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   }
 }

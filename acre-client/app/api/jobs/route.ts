@@ -11,7 +11,7 @@ const jobSchema = z.object({
   position: z.string().nullable().optional(),
   applicationLink: z.url().nullable().optional(),
   status: z.string().nullable().optional(),
-  appliedDate: z.iso.date().nullable().optional(),
+  appliedDate: z.string().nullable().optional(),
   location: z.string().nullable().optional(),
   platform: z.string().nullable().optional(),
   salary: z.string().nullable().optional(),
@@ -47,44 +47,44 @@ async function createClientWithAuth(request: Request) {
 }
 
 // GET method for testing authentication
-export async function GET(request: Request) {
-  const supabase = await createClientWithAuth(request);
-  const { data: { user } } = await supabase.auth.getUser();
+// export async function GET(request: Request) {
+//   const supabase = await createClientWithAuth(request);
+//   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized - No user found' }, { status: 401 });
-  }
+//   if (!user) {
+//     return NextResponse.json({ error: 'Unauthorized - No user found' }, { status: 401 });
+//   }
 
-  try {
-    // Get user's jobs to test database connection
-    const userJobs = await prisma.job.findMany({
-      where: { userId: user.id },
-      take: 5 // Just get the latest 5 for testing
-    });
+//   try {
+//     // Get user's jobs to test database connection
+//     const userJobs = await prisma.job.findMany({
+//       where: { userId: user.id },
+//       take: 5 // Just get the latest 5 for testing
+//     });
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Authentication successful!',
-      user: {
-        id: user.id,
-        email: user.email
-      },
-      jobCount: userJobs.length,
-      recentJobs: userJobs
-    });
-  } catch (error) {
-    console.error('Database error:', error);
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Authentication successful, but database error',
-      user: {
-        id: user.id,
-        email: user.email
-      },
-      error: 'Database connection failed'
-    }, { status: 200 });
-  }
-}
+//     return NextResponse.json({ 
+//       success: true, 
+//       message: 'Authentication successful!',
+//       user: {
+//         id: user.id,
+//         email: user.email
+//       },
+//       jobCount: userJobs.length,
+//       recentJobs: userJobs
+//     });
+//   } catch (error) {
+//     console.error('Database error:', error);
+//     return NextResponse.json({ 
+//       success: true, 
+//       message: 'Authentication successful, but database error',
+//       user: {
+//         id: user.id,
+//         email: user.email
+//       },
+//       error: 'Database connection failed'
+//     }, { status: 200 });
+//   }
+// }
 
 // POST method (your existing code)
 export async function POST(request: Request) {

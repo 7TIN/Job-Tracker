@@ -1,17 +1,14 @@
 import { storeTokens, clearAuth, getCurrentUser } from '../shared/auth';
 import type { ChromeMessage } from '../shared/types';
 
-const WEB_APP_URL = 'http://localhost:3000'; // Change to your deployed domain in prod
+const WEB_APP_URL = 'http://localhost:3000'; 
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   (async () => {
     try {
       switch (message.action) {
         case "loginUser":
-          // 🔹 Always start login flow at Next.js login page with ?from_extension=true
-          await chrome.tabs.create({
-            url: `${WEB_APP_URL}/login?from_extension=true`,
-          });
+          await chrome.tabs.create({ url: `${WEB_APP_URL}/login?from_extension=true` });
           break;
 
         case "getCurrentUser":
@@ -24,6 +21,33 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
           sendResponse({ success: true });
           break;
 
+        case "createJob":
+          const { jobData, access_token } = message;
+          if (!access_token) {
+            sendResponse({ success: false, error: "No access token provided" });
+            return;
+          }
+          // const body = jobData && Object.keys(jobData).length > 0 ? jobData : {
+          //   company: "OpenAI",
+          //   position: "AI Engineer",
+          //   appliedDate: new Date().toISOString(),
+          //   status: "Applied",
+          // };
+          const response = await fetch(`${WEB_APP_URL}/api/jobs`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${access_token}`,
+            },
+            body: JSON.stringify(jobData),
+          });
+          // console.log('Date:', jobData.appliedDate);
+          // console.log(JSON.stringify(jobData));
+
+          if (!response.ok) throw new Error(await response.text() || "Failed to save job");
+          sendResponse({ success: true, data: await response.json() });
+          break;
+
         default:
           console.warn("Unknown action in background:", message.action);
       }
@@ -32,11 +56,10 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       sendResponse({ error: (err as Error).message });
     }
   })();
-
-  return true; // keep channel open
+  return true;
 });
 
-// 🔹 Watch for redirect after successful login
+
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.url) {
     try {
@@ -51,7 +74,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
           if (tabId) chrome.tabs.remove(tabId);
 
-          // Notify popup that login was successful
           const authSuccessMessage: ChromeMessage = { action: 'authSuccess' };
           chrome.runtime.sendMessage(authSuccessMessage).catch(() => {});
         }

@@ -18,6 +18,7 @@
   "dependencies": {
     "@supabase/ssr": "supabase/ssr",
     "@supabase/supabase-js": "^2.56.0",
+    "dayjs": "^1.11.17",
     "zod": "^4.1.3"
   }
 }
