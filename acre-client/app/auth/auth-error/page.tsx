@@ -1,10 +1,10 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 
 export default function AuthErrorPage() {
-  const searchParams = useSearchParams();
-  const error = searchParams.get("error");
+  // const searchParams = useSearchParams();
+  // const error = searchParams.get("error");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -14,13 +14,9 @@ export default function AuthErrorPage() {
           Authentication Error
         </h2>
 
-        {error ? (
-          <p className="text-gray-700 mb-4">{error}</p>
-        ) : (
           <p className="text-gray-700 mb-4">
             Something went wrong during login. Please try again.
           </p>
-        )}
 
         <a
           href="/login"
